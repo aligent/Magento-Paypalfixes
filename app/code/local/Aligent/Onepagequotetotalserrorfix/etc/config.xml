@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Aligent_Onepagequotetotalserrorfix>
+            <version>0.1.0</version>
+        </Aligent_Onepagequotetotalserrorfix>
+    </modules>
+    <global>
+        <models>
+            <onepagequotetotalserrorfix>
+                <class>Aligent_Onepagequotetotalserrorfix_Model</class>
+            </onepagequotetotalserrorfix>
+        </models>
+    </global>
+    <phpunit>
+        <suite>
+            <modules>
+                <Aligent_Onepagequotetotalserrorfix/>
+            </modules>
+        </suite>
+    </phpunit>
+</config>

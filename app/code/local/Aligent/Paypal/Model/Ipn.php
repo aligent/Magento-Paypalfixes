@@ -7,34 +7,26 @@
  * @author Jim O'Halloran <jim@aligent.com.au>
  */
 class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn {
+    const CONFIG_IPN_REFUND_METHOD = 'paypal/api/ipn_refund_method';
 
     /**
      * Process a refund or a chargeback
      */
     protected function _registerPaymentRefund() {
-		
-		$this->_importPaymentInformation();
-        $reason = $this->getRequestData('reason_code');
-        $isRefundFinal = !$this->_info->isReversalDisputable($reason);
-        $amount = -1 * $this->getRequestData('mc_gross');
-		
-		Mage::log('IPN _registerPaymentRefund()', null, 'mylogfile.log');
-		Mage::log('IPN reason_code'.$reason, null, 'mylogfile.log');
-		Mage::log('IPN isRefundFinal'.$isRefundFinal, null, 'mylogfile.log');
-		Mage::log('IPN amount'.$amount, null, 'mylogfile.log');
-       /*
+		if (Mage::getStoreConfig(self::CONFIG_IPN_REFUND_METHOD) == Aligent_Paypal_Model_System_Config_Source_Refundmethod::METHOD_DEFAULT) {
+            return parent::_registerPaymentRefund();
+        } else {
 
-        $payment = $this->_order->getPayment()
-                ->setPreparedMessage($this->_createIpnComment($this->_info->explainReasonCode($reason)))
-                ->setTransactionId($this->getRequestData('txn_id'))
-                ->setParentTransactionId($this->getRequestData('parent_txn_id'))
-                ->setIsTransactionClosed($isRefundFinal);
-        $this->_order->save();
+            $this->_importPaymentInformation();
+            $reason = $this->getRequestData('reason_code');
+            $isRefundFinal = !$this->_info->isReversalDisputable($reason);
+            $amount = -1 * $this->getRequestData('mc_gross');
 
-        $comment = $this->_order->addStatusHistoryComment(
-                        Mage::helper('paypal')->__('IPN "Refunded". Refunded amount of %s. Transaction ID: "%s". No automatic credit memo generated.', $this->_order->getBaseCurrentcy()->formatTxt($amount), $this->getRequestData('txn_id'))
-                )
-                ->save();*/
+            Mage::log('IPN Refund received.  Reason Code: '.$reason.' isRefundFinal: '.$isRefundFinal.' Amount: '.$amount);
+
+
+        }
+
     }
 
 }

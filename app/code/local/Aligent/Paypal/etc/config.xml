@@ -16,14 +16,26 @@
                 </rewrite>
             </paypal>
         </models>
+        <helpers>
+            <aligent_paypal>
+                <class>Aligent_Paypal_Helper</class>
+            </aligent_paypal>
+        </helpers>
     </global>
 
     <phpunit>
         <suite>
             <modules>
-                <Aligent_Paypal />
+                <Aligent_Paypal/>
             </modules>
         </suite>
     </phpunit>
 
+    <default>
+        <paypal>
+            <api>
+                <ipn_refund_method>default</ipn_refund_method>
+            </api>
+        </paypal>
+    </default>
 </config>

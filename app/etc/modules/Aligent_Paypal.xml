@@ -4,7 +4,9 @@
         <Aligent_Paypal>
             <active>true</active>
             <codePool>local</codePool>
-            <depends></depends>
+            <depends>
+                <Mage_Paypal />
+            </depends>
         </Aligent_Paypal>
     </modules>
 </config>

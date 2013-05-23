@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Aligent_Paypal>
+            <version>0.0.1</version>
+        </Aligent_Paypal>
+    </modules>
+    <global>
+        <models>
+            <aligent_paypal>
+                <class>Aligent_Paypal_Model</class>
+            </aligent_paypal>
+            <paypal>
+                <rewrite>
+                    <ipn>Aligent_Paypal_Model_Ipn</ipn>
+                </rewrite>
+            </paypal>
+        </models>
+    </global>
+
+    <phpunit>
+        <suite>
+            <modules>
+                <Aligent_Paypal />
+            </modules>
+        </suite>
+    </phpunit>
+
+</config>

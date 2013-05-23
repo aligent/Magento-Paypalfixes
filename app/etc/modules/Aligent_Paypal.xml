@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Aligent_Paypal>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends></depends>
+        </Aligent_Paypal>
+    </modules>
+</config>

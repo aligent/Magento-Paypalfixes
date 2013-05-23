@@ -43,4 +43,48 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn {
 
     }
 
+    /**
+     * Post back to PayPal to check whether this request is a valid one
+     *
+     * @param Zend_Http_Client_Adapter_Interface $httpAdapter
+     */
+    protected function _postBack(Zend_Http_Client_Adapter_Interface $httpAdapter)
+    {
+        $sReq = '';
+        foreach ($this->_request as $k => $v) {
+            $sReq .= '&'.$k.'='.urlencode(stripslashes($v));
+        }
+        $sReq .= "&cmd=_notify-validate";
+        $sReq = substr($sReq, 1);
+        $this->_debugData['postback'] = $sReq;
+        $this->_debugData['postback_to'] = $this->_config->getPaypalUrl();
+
+        $httpAdapter->write(Zend_Http_Client::POST, $this->_config->getPaypalUrl(), '1.1', array(), $sReq);
+        try {
+            $response = $httpAdapter->read();
+        } catch (Exception $e) {
+            $this->_debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
+            throw $e;
+        }
+        $this->_debugData['postback_result'] = $response;
+
+        // =====================================================================
+        // Changed from default code.  Paypal now regularly returns a 100
+        // response with an empty body followed by a 200 response with the
+        // VERIFIED/INVALID message.  The code below will check the last
+        // response for the VERIFIED/INVALID code rather than the first.
+        //
+        // ref: http://www.dhmedia.com.au/blog/debugging-paypal-ipn-postback-failure-magent
+        // Magento 2 Pull Request: https://github.com/magento/magento2/pull/136
+        $response = preg_split('/^\r?$/m', $response);
+        $response = trim(end($response));
+        // =====================================================================
+
+        if ($response != 'VERIFIED') {
+            throw new Exception('PayPal IPN postback failure. See ' . self::DEFAULT_LOG_FILE . ' for details.');
+        }
+        unset($this->_debugData['postback'], $this->_debugData['postback_result']);
+    }
+
+
 }

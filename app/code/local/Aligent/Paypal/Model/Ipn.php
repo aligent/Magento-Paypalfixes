@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Description of Ipnfix
+ * Provides bugfixes and enahncements to Paypal IPN handling.
  *
- * @author luke
+ * @author Luke Mills <luke@aligent.com.au>
+ * @author Jim O'Halloran <jim@aligent.com.au>
  */
 class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn {
 

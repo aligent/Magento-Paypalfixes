@@ -32,10 +32,10 @@
     </phpunit>
 
     <default>
-        <paypal>
-            <api>
+        <payment>
+            <modpaypal>
                 <ipn_refund_method>default</ipn_refund_method>
-            </api>
-        </paypal>
+            </modpaypal>
+        </payment>
     </default>
 </config>

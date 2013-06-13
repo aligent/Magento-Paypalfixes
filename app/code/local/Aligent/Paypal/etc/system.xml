@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <sections>
-        <paypal>
+        <payment translate="label">
             <groups>
-                <api>
+                <modpaypal translate="label">
+                    <label>Paypal Modifications</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>9</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>0</show_in_store>
                     <fields>
                         <ipn_refund_method translate="label comment">
                             <label>Refund IPN Action</label>
@@ -16,8 +22,8 @@
                             <show_in_store>0</show_in_store>
                         </ipn_refund_method>
                     </fields>
-                </api>
+                </modpaypal>
             </groups>
-        </paypal>
+        </payment>
     </sections>
 </config>

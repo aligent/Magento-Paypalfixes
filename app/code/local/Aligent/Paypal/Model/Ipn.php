@@ -7,7 +7,7 @@
  * @author Jim O'Halloran <jim@aligent.com.au>
  */
 class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn {
-    const CONFIG_IPN_REFUND_METHOD = 'paypal/api/ipn_refund_method';
+    const CONFIG_IPN_REFUND_METHOD = 'payment/modpaypal/ipn_refund_method';
 
     /**
      * Process a refund or a chargeback

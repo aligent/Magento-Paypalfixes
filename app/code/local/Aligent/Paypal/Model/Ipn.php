@@ -48,7 +48,8 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
     /**
      * Post back to PayPal to check whether this request is a valid one
      *
-     * @param Zend_Http_Client_Adapter_Interface $httpAdapter
+     * @param  Zend_Http_Client_Adapter_Interface $httpAdapter
+     * @throws Exception
      */
     protected function _postBack(Zend_Http_Client_Adapter_Interface $httpAdapter)
     {

@@ -17,7 +17,7 @@
             </paypal>
             <sales>
                 <rewrite>
-                    <quote_payment>Aligent_Paypal_Model_Payment_Info</quote_payment>
+                    <quote_payment>Aligent_Paypal_Model_Sales_Quote_Payment</quote_payment>
                 </rewrite>
             </sales>
         </models>

@@ -5,6 +5,6 @@
   "homepage":"https://github.com/aligent/Magento-Paypal",
   "description":"Changes the default Magento behavior for Paypal Refunds and fixes HTTP 1.1 IPN issues.",
   "require":{
-      "magento-hackathon/magento-composer-installer":"*",
+      "magento-hackathon/magento-composer-installer":"*"
   }
 }

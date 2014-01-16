@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Provides bugfixes and enahncements to Paypal IPN handling.
+ * Provides bugfixes and enhancements to Paypal IPN handling.
  *
  * @author Luke Mills <luke@aligent.com.au>
  * @author Jim O'Halloran <jim@aligent.com.au>
@@ -9,6 +9,52 @@
 class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
 {
     const CONFIG_IPN_REFUND_METHOD = 'payment/modpaypal/ipn_refund_method';
+
+    /**
+     * Get ipn data, send verification to PayPal, run corresponding handler.  Override
+     * to allow handling of mc_cancel transactions which don't have an order increment
+     * id attached.
+     *
+     * @param array $request
+     * @param Zend_Http_Client_Adapter_Interface $httpAdapter
+     * @throws Exception
+     */
+    public function processIpnRequest(array $request, Zend_Http_Client_Adapter_Interface $httpAdapter = null)
+    {
+        $this->_request   = $request;
+        $this->_debugData = array('ipn' => $request);
+        ksort($this->_debugData['ipn']);
+
+        if (isset($this->_request['txn_type']) && 'mp_cancel' == $this->_request['txn_type']) {
+            $this->_registerMpCancel();
+        } else {
+            parent::processIpnRequest($request, $httpAdapter);
+        }
+    }
+
+
+    /**
+     * Process a cancellation.  Standard Magento fails at this because there's
+     * no order number in the IPN.
+     */
+    protected function _registerMpCancel()
+    {
+        $reason = $this->getRequestData('reason_code');
+
+        Mage::log('IPN Cancellation received.  Reason Code: '.$reason.' Payer Email: ' . $this->getRequestData('payer_email') . ' First Name: ' . $this->getRequestData('payer_first_name') . ' Last Name: ' . $this->getRequestData('last_name'));
+
+        $vCommentText = 'Payer Email: ' . $this->getRequestData('payer_email') . ' First Name: ' . $this->getRequestData('payer_first_name');
+        $vCommentText .= ' Last Name: ' . $this->getRequestData('last_name');
+        $vCommentText .= ' Reason Code: ' . $reason;
+
+        $oNotification = Mage::getModel('adminnotification/inbox');
+        $oNotification->setSeverity(Mage_AdminNotification_Model_Inbox::SEVERITY_MINOR);
+        $oNotification->setDateAdded(date("c", time()));
+        $oNotification->setTitle('Paypal Cancellation IPN Received');
+        $oNotification->setDescription($vCommentText);
+        $oNotification->save();
+    }
+
 
     /**
      * Process a refund or a chargeback

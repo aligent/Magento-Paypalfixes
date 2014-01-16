@@ -43,4 +43,15 @@
             </modpaypal>
         </payment>
     </default>
+    <frontend>
+        <routers>
+            <paypal>
+                <args>
+                    <modules>
+                        <aligent_paypal before="Mage_Paypal">Aligent_Paypal</aligent_paypal>
+                    </modules>
+                </args>
+            </paypal>
+        </routers>
+    </frontend>
 </config>

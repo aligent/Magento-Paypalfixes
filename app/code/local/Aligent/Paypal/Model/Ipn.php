@@ -107,7 +107,7 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
         $sReq = substr($sReq, 1);
         $this->_debugData['postback'] = $sReq;
         $this->_debugData['postback_to'] = $this->_config->getPaypalUrl();
-        $httpAdapter->addOption(CURLOPT_SSLVERSION,6);
+        $httpAdapter->addOption(CURLOPT_SSLVERSION,6); //6 == CURL_SSLVERSION_TLSv1_2
         $httpAdapter->write(Zend_Http_Client::POST, $this->_config->getPaypalUrl(), '1.1', array(), $sReq);
         try {
             $response = $httpAdapter->read();

@@ -11,6 +11,20 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
     const CONFIG_IPN_REFUND_METHOD = 'payment/modpaypal/ipn_refund_method';
 
     /**
+     * Default postback endpoint URL.
+     *
+     * @var string
+     */
+    const DEFAULT_POSTBACK_URL = 'https://ipnpb.paypal.com/cgi-bin/webscr';
+
+    /**
+     * Sandbox postback endpoint URL.
+     *
+     * @var string
+     */
+    const SANDBOX_POSTBACK_URL = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
+
+    /**
      * Get ipn data, send verification to PayPal, run corresponding handler.  Override
      * to allow handling of mc_cancel transactions which don't have an order increment
      * id attached.
@@ -99,6 +113,8 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
      */
     protected function _postBack(Zend_Http_Client_Adapter_Interface $httpAdapter)
     {
+        $url = $this->_getPostbackUrl();
+
         $sReq = '';
         foreach ($this->_request as $k => $v) {
             $sReq .= '&' . $k . '=' . urlencode(stripslashes($v));
@@ -106,9 +122,9 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
         $sReq .= "&cmd=_notify-validate";
         $sReq = substr($sReq, 1);
         $this->_debugData['postback'] = $sReq;
-        $this->_debugData['postback_to'] = $this->_config->getPaypalUrl();
+        $this->_debugData['postback_to'] = $url;
         $httpAdapter->addOption(CURLOPT_SSLVERSION,6); //6 == CURL_SSLVERSION_TLSv1_2
-        $httpAdapter->write(Zend_Http_Client::POST, $this->_config->getPaypalUrl(), '1.1', array(), $sReq);
+        $httpAdapter->write(Zend_Http_Client::POST, $url, '1.1', array(), $sReq);
         try {
             $response = $httpAdapter->read();
         } catch (Exception $e) {
@@ -135,5 +151,13 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
         unset($this->_debugData['postback'], $this->_debugData['postback_result']);
     }
 
-
+    /**
+     * Get postback endpoint URL.
+     *
+     * @return string
+     */
+    protected function _getPostbackUrl()
+    {
+        return $this->_config->sandboxFlag ? self::SANDBOX_POSTBACK_URL : self::DEFAULT_POSTBACK_URL;
+    }
 }

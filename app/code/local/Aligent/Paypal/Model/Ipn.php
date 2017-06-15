@@ -39,7 +39,7 @@ class Aligent_Paypal_Model_Ipn extends Mage_Paypal_Model_Ipn
         $this->_debugData = array('ipn' => $request);
         ksort($this->_debugData['ipn']);
 
-        if (isset($this->_request['txn_type']) && 'mp_cancel' == $this->_request['txn_type']) {
+        if (isset($this->_request['reason_code']) && 'refund' == $this->_request['reason_code']) {
             $this->_registerMpCancel();
         } else {
             parent::processIpnRequest($request, $httpAdapter);
